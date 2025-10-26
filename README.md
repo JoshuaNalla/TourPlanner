@@ -2,6 +2,13 @@
 
 A modern, responsive React application for displaying and managing tourist trip plans. Built with React, Vite, and modern CSS for a beautiful user experience.
 
+SWENG 411 final project.
+Team members:
+Joshua Nallaraja
+Riley Fry
+Matthew Maccari
+Daniel Squair
+
 ## Features
 
 - 🎨 **Modern UI Design**: Beautiful gradient backgrounds, glassmorphism effects, and smooth animations
