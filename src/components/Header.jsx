@@ -1,69 +1,41 @@
 import React from 'react'
-import { MapPin, Calendar, Users, Star } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { MapPin, Calendar, Users, Plus } from 'lucide-react'
 
 const Header = () => {
   return (
-    <header style={{
-      background: 'rgba(255, 255, 255, 0.1)',
-      backdropFilter: 'blur(10px)',
-      borderBottom: '1px solid rgba(255, 255, 255, 0.2)',
-      padding: '20px 0',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100
-    }}>
+    <header className="header">
       <div className="container">
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '20px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '18px'
-            }}>
+        <div className="header-container">
+          <Link to="/" className="header-logo-section">
+            <div className="header-logo-icon">
               ✈️
             </div>
-            <h1 style={{
-              color: 'white',
-              fontSize: '28px',
-              fontWeight: '700',
-              margin: 0
-            }}>
-              Tour Planner
+            <h1 className="header-title">
+              Trip Planner
             </h1>
-          </div>
+          </Link>
           
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
-            color: 'white',
-            fontSize: '14px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div className="header-nav">
+            <Link to="/" className="header-nav-item">
               <MapPin size={16} />
               <span>My Trips</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            </Link>
+            <Link to="/calendar" className="header-nav-item">
               <Calendar size={16} />
               <span>Calendar</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            </Link>
+            <div className="header-nav-item">
               <Users size={16} />
               <span>Groups</span>
             </div>
+            <Link 
+              to="/create-new-plan"
+              className="header-create-button"
+            >
+              <Plus size={16} />
+              <span>Create New Plan</span>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
+import { Routes, Route } from 'react-router-dom'
 import Header from './components/Header'
 import TripPlansGrid from './components/TripPlansGrid'
 import SearchAndFilter from './components/SearchAndFilter'
+import CreateNewPlan from './components/CreateNewPlan'
+import Calendar from './components/Calendar'
 import { sampleTripPlans } from './data/sampleData'
 
-function App() {
+function Home() {
   const [tripPlans, setTripPlans] = useState(sampleTripPlans)
   const [filteredPlans, setFilteredPlans] = useState(sampleTripPlans)
   const [searchTerm, setSearchTerm] = useState('')
@@ -41,17 +44,27 @@ function App() {
   }
 
   return (
+    <main className="container main-content">
+      <SearchAndFilter 
+        onSearch={handleSearch}
+        onFilter={handleFilter}
+        searchTerm={searchTerm}
+        filterCategory={filterCategory}
+      />
+      <TripPlansGrid tripPlans={filteredPlans} />
+    </main>
+  )
+}
+
+function App() {
+  return (
     <div className="App">
       <Header />
-      <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
-        <SearchAndFilter 
-          onSearch={handleSearch}
-          onFilter={handleFilter}
-          searchTerm={searchTerm}
-          filterCategory={filterCategory}
-        />
-        <TripPlansGrid tripPlans={filteredPlans} />
-      </main>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/create-new-plan" element={<CreateNewPlan />} />
+        <Route path="/calendar" element={<Calendar />} />
+      </Routes>
     </div>
   )
 }

@@ -4,30 +4,14 @@ import TripPlanCard from './TripPlanCard'
 const TripPlansGrid = ({ tripPlans }) => {
   if (tripPlans.length === 0) {
     return (
-      <div className="card fade-in-up" style={{
-        textAlign: 'center',
-        padding: '60px 20px',
-        background: 'rgba(255, 255, 255, 0.8)'
-      }}>
-        <div style={{
-          fontSize: '64px',
-          marginBottom: '20px'
-        }}>
+      <div className="card fade-in-up empty-state-card">
+        <div className="empty-state-emoji">
           🗺️
         </div>
-        <h3 style={{
-          fontSize: '24px',
-          fontWeight: '600',
-          color: '#333',
-          marginBottom: '12px'
-        }}>
+        <h3 className="empty-state-title">
           No trips found
         </h3>
-        <p style={{
-          color: '#666',
-          fontSize: '16px',
-          marginBottom: '24px'
-        }}>
+        <p className="empty-state-message">
           Try adjusting your search or filter criteria
         </p>
         <button className="btn btn-primary">
@@ -38,16 +22,11 @@ const TripPlansGrid = ({ tripPlans }) => {
   }
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-      gap: '24px',
-      marginTop: '20px'
-    }}>
+    <div className="trip-plans-grid">
       {tripPlans.map((plan, index) => (
         <div 
           key={plan.id}
-          className="fade-in-up"
+          className="fade-in-up trip-plan-item"
           style={{
             animationDelay: `${index * 0.1}s`
           }}
