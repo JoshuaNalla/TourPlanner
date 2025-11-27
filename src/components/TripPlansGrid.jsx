@@ -1,7 +1,7 @@
 import React from 'react'
 import TripPlanCard from './TripPlanCard'
 
-const TripPlansGrid = ({ tripPlans }) => {
+const TripPlansGrid = ({ tripPlans, goToTripDetails }) => {
   if (tripPlans.length === 0) {
     return (
       <div className="card fade-in-up" style={{
@@ -52,7 +52,9 @@ const TripPlansGrid = ({ tripPlans }) => {
             animationDelay: `${index * 0.1}s`
           }}
         >
-          <TripPlanCard tripPlan={plan} />
+          <TripPlanCard tripPlan={plan}
+            goToTripDetails={goToTripDetails}
+          />
         </div>
       ))}
     </div>

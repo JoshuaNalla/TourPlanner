@@ -1,7 +1,7 @@
 import React from 'react'
 import { MapPin, Calendar, Users, Star } from 'lucide-react'
 
-const Header = () => {
+const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome}) => {
   return (
     <header style={{
       background: 'rgba(255, 255, 255, 0.1)',
@@ -20,7 +20,10 @@ const Header = () => {
           flexWrap: 'wrap',
           gap: '20px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div 
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: "pointer"}}
+            onClick={goToHome}
+            >
             <div style={{
               width: '40px',
               height: '40px',
@@ -35,7 +38,8 @@ const Header = () => {
             }}>
               ✈️
             </div>
-            <h1 style={{
+            <h1 
+              style={{
               color: 'white',
               fontSize: '28px',
               fontWeight: '700',
@@ -52,23 +56,26 @@ const Header = () => {
             color: 'white',
             fontSize: '14px'
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div 
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
+              onClick={goToMyTrips}
+            >
               <MapPin size={16} />
-              <a href="/my-trips.html" style={{ color: 'white', textDecoration: 'none' }}>
-                My Trips
-              </a>
+              <span>My Trips</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div 
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
+              onClick={goToCalendar}
+            >
               <Calendar size={16} />
-              <a href="/calendar.html" style={{ color: 'white', textDecoration: 'none' }}>
-                Calendar
-              </a>
+              <span>Calendar</span> 
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div 
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
+              onClick={goToGroups}
+            >
               <Users size={16} />
-              <a href="/groups.html" style={{ color: 'white', textDecoration: 'none' }}>
-                Groups
-              </a>
+              <span>Groups</span> 
             </div>
           </div>
         </div>

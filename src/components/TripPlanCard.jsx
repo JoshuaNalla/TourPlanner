@@ -1,7 +1,7 @@
 import React from 'react'
 import { MapPin, Calendar, Users, Clock, Star, Plane, Camera, Utensils } from 'lucide-react'
 
-const TripPlanCard = ({ tripPlan }) => {
+const TripPlanCard = ({ tripPlan, goToTripDetails }) => {
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'adventure': return <Plane size={16} />
@@ -180,9 +180,7 @@ const TripPlanCard = ({ tripPlan }) => {
             padding: '12px',
             fontSize: '14px'
           }}
-          onClick={() => {
-              window.location.href = '/trip-details.html'
-          }}
+          onClick={goToTripDetails}
           >
             View Details 
           </button>
