@@ -54,15 +54,21 @@ const Header = () => {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <MapPin size={16} />
-              <span>My Trips</span>
+              <a href="/my-trips.html" style={{ color: 'white', textDecoration: 'none' }}>
+                My Trips
+              </a>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Calendar size={16} />
-              <span>Calendar</span>
+              <a href="/calendar.html" style={{ color: 'white', textDecoration: 'none' }}>
+                Calendar
+              </a>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Users size={16} />
-              <span>Groups</span>
+              <a href="/groups.html" style={{ color: 'white', textDecoration: 'none' }}>
+                Groups
+              </a>
             </div>
           </div>
         </div>
