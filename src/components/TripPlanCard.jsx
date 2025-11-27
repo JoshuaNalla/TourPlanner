@@ -179,9 +179,14 @@ const TripPlanCard = ({ tripPlan }) => {
             flex: 1,
             padding: '12px',
             fontSize: '14px'
-          }}>
-            View Details
+          }}
+          onClick={() => {
+              window.location.href = '/trip-details.html'
+          }}
+          >
+            View Details 
           </button>
+
           <button className="btn btn-secondary" style={{
             padding: '12px',
             fontSize: '14px',
