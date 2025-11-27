@@ -3,12 +3,17 @@ import Header from './components/Header'
 import TripPlansGrid from './components/TripPlansGrid'
 import SearchAndFilter from './components/SearchAndFilter'
 import { sampleTripPlans } from './data/sampleData'
+import MyTrips from "./components/MyTrips"
+import Calendar from "./components/Calendar"
+import Groups from "./components/Groups"
+import TripDetails from "./components/TripDetails"
 
 function App() {
   const [tripPlans, setTripPlans] = useState(sampleTripPlans)
   const [filteredPlans, setFilteredPlans] = useState(sampleTripPlans)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
+  const [page, setPage] = useState("Home")
 
   const handleSearch = (term) => {
     setSearchTerm(term)
@@ -42,16 +47,29 @@ function App() {
 
   return (
     <div className="App">
-      <Header />
-      <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
+      <Header goToMyTrips={() => setPage("MyTrips")} 
+        goToCalendar={() => setPage("Calendar")}
+        goToGroups={() => setPage("Groups")} 
+        goToHome={() => setPage("Home")} 
+      />
+      {page === "MyTrips" && <MyTrips />}
+      {page === "Calendar" && <Calendar />}
+      {page === "Groups" && <Groups/>}
+      {page === "TripDetails" && <TripDetails/>}
+      {page === "Home" && (
+        <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
         <SearchAndFilter 
-          onSearch={handleSearch}
-          onFilter={handleFilter}
-          searchTerm={searchTerm}
-          filterCategory={filterCategory}
+           onSearch={handleSearch}
+           onFilter={handleFilter}
+           searchTerm={searchTerm}
+            filterCategory={filterCategory}
+          />
+        <TripPlansGrid 
+            tripPlans={filteredPlans}
+            goToTripDetails={() => setPage("TripDetails")}
         />
-        <TripPlansGrid tripPlans={filteredPlans} />
       </main>
+      )}
     </div>
   )
 }
