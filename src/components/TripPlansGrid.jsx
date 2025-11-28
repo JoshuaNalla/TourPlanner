@@ -53,7 +53,7 @@ const TripPlansGrid = ({ tripPlans, goToTripDetails }) => {
           }}
         >
           <TripPlanCard tripPlan={plan}
-            goToTripDetails={goToTripDetails}
+            goToTripDetails={() => goToTripDetails(plan)}
           />
         </div>
       ))}
