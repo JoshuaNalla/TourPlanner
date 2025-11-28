@@ -14,6 +14,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
   const [page, setPage] = useState("Home")
+  const [selectedTrip, setSelectedTrip] = useState(null)
 
   const handleSearch = (term) => {
     setSearchTerm(term)
@@ -55,7 +56,7 @@ function App() {
       {page === "MyTrips" && <MyTrips />}
       {page === "Calendar" && <Calendar />}
       {page === "Groups" && <Groups/>}
-      {page === "TripDetails" && <TripDetails/>}
+      {page === "TripDetails" && selectedTrip && <TripDetails trip = {selectedTrip} />}
       {page === "Home" && (
         <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
         <SearchAndFilter 
@@ -66,7 +67,10 @@ function App() {
           />
         <TripPlansGrid 
             tripPlans={filteredPlans}
-            goToTripDetails={() => setPage("TripDetails")}
+            goToTripDetails={(trip) => {
+            setSelectedTrip(trip)
+            setPage("TripDetails")
+            }}
         />
       </main>
       )}
