@@ -22,6 +22,7 @@ Daniel Squair
 
 ### Prerequisites
 
+- Package Manager (Homebrew, apt, etc)
 - Node.js (version 14 or higher)
 - npm or yarn
 
@@ -30,12 +31,11 @@ Daniel Squair
 1. Install dependencies:
 ```bash
 npm install
-```
+install maven (brew install maven, sudo apt install maven, etc.)
 
-2. Start the development server:
-```bash
+2. Start the development servers:
 npm run dev
-```
+mvn -f ./src_backend/pom.xml spring-boot:run
 
 3. Open your browser and visit `http://localhost:3000`
 
