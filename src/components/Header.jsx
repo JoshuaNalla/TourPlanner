@@ -1,7 +1,7 @@
 import React from 'react'
 import { MapPin, Calendar, Users, Star } from 'lucide-react'
 
-const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome}) => {
+const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome, goToRegister}) => {
   return (
     <header style={{
       background: 'rgba(255, 255, 255, 0.1)',
@@ -56,6 +56,13 @@ const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome}) => {
             color: 'white',
             fontSize: '14px'
           }}>
+            <div 
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
+              onClick={goToRegister}
+            >
+              <Users size={16} />
+              <span>Register</span>
+              </div>
             <div 
               style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
               onClick={goToMyTrips}

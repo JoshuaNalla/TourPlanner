@@ -2,7 +2,7 @@ package com.example.demo.Service;
 
 import com.example.demo.Model.User;
 import com.example.demo.Repository.UserRepository;
-import com.example.demo.DTO.UserTO;
+import com.example.demo.UserDTO.UserTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,6 @@ public class UserService {
             userRepo.save(user);
 
         } catch (Exception e){
-            e.printStackTrace();
             return "Error creating user";
         }
 
@@ -38,10 +37,6 @@ public class UserService {
         }
 
         return userList;
-    }
-
-    public User getUserByEmail(String email) {
-        return userRepo.findByEmail(email);
     }
 
     public String deleteUser(String id) {
