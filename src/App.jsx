@@ -7,6 +7,7 @@ import MyTrips from "./components/MyTrips"
 import Calendar from "./components/Calendar"
 import Groups from "./components/Groups"
 import TripDetails from "./components/TripDetails"
+import Register from "./components/Register"
 
 function App() {
   const [tripPlans, setTripPlans] = useState(sampleTripPlans)
@@ -51,12 +52,14 @@ function App() {
       <Header goToMyTrips={() => setPage("MyTrips")} 
         goToCalendar={() => setPage("Calendar")}
         goToGroups={() => setPage("Groups")} 
-        goToHome={() => setPage("Home")} 
+        goToHome={() => setPage("Home")}
+        goToRegister={() => setPage("Register")}
       />
       {page === "MyTrips" && <MyTrips />}
       {page === "Calendar" && <Calendar />}
       {page === "Groups" && <Groups/>}
       {page === "TripDetails" && selectedTrip && <TripDetails trip = {selectedTrip} />}
+      {page === "Register" && <Register />}
       {page === "Home" && (
         <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
         <SearchAndFilter 
