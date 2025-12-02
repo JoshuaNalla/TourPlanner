@@ -33,6 +33,7 @@ Daniel Squair
 npm install
 install maven (brew install maven, sudo apt install maven, etc.)
 
+
 2. Start the development servers:
 npm run dev
 mvn -f ./src_backend/pom.xml spring-boot:run
