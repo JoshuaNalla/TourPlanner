@@ -9,6 +9,11 @@ Riley Fry
 Matthew Maccari
 Daniel Squair
 
+
+running into 401 error: get rid of the security dependency in pom.xml <-------
+
+
+
 ## Features
 
 - 🎨 **Modern UI Design**: Beautiful gradient backgrounds, glassmorphism effects, and smooth animations
