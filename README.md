@@ -12,6 +12,8 @@ Daniel Squair
 
 running into 401 error: get rid of the security dependency in pom.xml <-------
 
+when running this file, be sure to include the database url as well as the ai key and url in the application.properties file in resources in src_backend
+
 
 
 ## Features
@@ -51,22 +53,6 @@ mvn -f ./src_backend/pom.xml spring-boot:run
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint
-
-## Project Structure
-
-```
-src/
-├── components/
-│   ├── Header.jsx           # Navigation header
-│   ├── SearchAndFilter.jsx  # Search and filter controls
-│   ├── TripPlansGrid.jsx    # Grid layout for trip cards
-│   └── TripPlanCard.jsx     # Individual trip card component
-├── data/
-│   └── sampleData.js        # Sample trip data
-├── App.jsx                  # Main application component
-├── main.jsx                 # React entry point
-└── index.css                # Global styles
-```
 
 ## Technologies Used
 
