@@ -1,0 +1,5 @@
+# Ignore application.properties since it contains the API key
+src_backend/src/main/resources/application.properties
+
+# Ignore ALL build output since the api key is compiled into the code here.
+src_backend/target/

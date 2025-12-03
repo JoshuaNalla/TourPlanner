@@ -8,6 +8,8 @@ import Calendar from "./components/Calendar"
 import Groups from "./components/Groups"
 import TripDetails from "./components/TripDetails"
 import Register from "./components/Register"
+import Login from "./components/Login"
+import CreateNewPlan from "./components/CreateNewPlan"
 
 function App() {
   const [tripPlans, setTripPlans] = useState(sampleTripPlans)
@@ -54,12 +56,15 @@ function App() {
         goToGroups={() => setPage("Groups")} 
         goToHome={() => setPage("Home")}
         goToRegister={() => setPage("Register")}
+        goToLogin={() => setPage("Login")}
       />
       {page === "MyTrips" && <MyTrips />}
       {page === "Calendar" && <Calendar />}
       {page === "Groups" && <Groups/>}
       {page === "TripDetails" && selectedTrip && <TripDetails trip = {selectedTrip} />}
       {page === "Register" && <Register />}
+      {page === "Login" && <Login goToRegister={() => setPage("Register")} />}
+      {page === "CreateNewPlan" && <CreateNewPlan goToHome={() => setPage("Home")} />}
       {page === "Home" && (
         <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
         <SearchAndFilter 
@@ -67,6 +72,7 @@ function App() {
            onFilter={handleFilter}
            searchTerm={searchTerm}
             filterCategory={filterCategory}
+            goToCreateNewPlan={() => setPage("CreateNewPlan")}
           />
         <TripPlansGrid 
             tripPlans={filteredPlans}
