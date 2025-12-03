@@ -45,7 +45,7 @@ const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome, goToRegister, 
               fontWeight: '700',
               margin: 0
             }}>
-              Tour Planner
+              Trip Planner
             </h1>
           </div>
           
