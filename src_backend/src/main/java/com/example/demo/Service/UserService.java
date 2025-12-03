@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 @Service
 public class UserService {
     @Autowired
@@ -16,9 +18,10 @@ public class UserService {
 
     public String createUser(UserTO userTO) {
         try {
+            String hashedPassword = BCrypt.hashpw(userTO.getPassword(), BCrypt.gensalt());
             User user = User.builder()
                     .email(userTO.getEmail())
-                    .password(userTO.getPassword())
+                    .password(hashedPassword)
                     .build();
             userRepo.save(user);
 
@@ -28,6 +31,16 @@ public class UserService {
         }
 
         return "User Created Successfully";
+    }
+
+    public boolean loginUser(String email, String password) {
+        User user = userRepo.findByEmail(email);
+        if (user == null) {
+            System.out.println("User not found.");
+            return false;
+        }
+
+        return BCrypt.checkpw(password, user.getPassword());
     }
 
     public List<User> getUsers() {
