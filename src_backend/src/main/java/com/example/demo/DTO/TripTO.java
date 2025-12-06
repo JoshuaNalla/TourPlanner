@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TripTO {
     private String id;
+    private String email;
     private String title;
     private String description;
 }
