@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3001")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -43,4 +43,13 @@ public class UserController {
     public String updateUser(@RequestBody UserTO userTO) {
         return userService.updateUser(userTO);
     }
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean login(@RequestBody UserTO userTO) {
+        boolean result = userService.loginUser(userTO.getEmail(), userTO.getPassword());
+        System.out.println("Successful Login: " + result);
+        return result;
+    }
+
 }
