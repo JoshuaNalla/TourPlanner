@@ -40,6 +40,7 @@ public class UserService {
             return false;
         }
 
+        //System.out.println("LOGIN SUCCESS");
         return BCrypt.checkpw(password, user.getPassword());
     }
 
