@@ -45,6 +45,7 @@ public class AIController {
             // Validate API key
             if (groqApiKey == null || groqApiKey.isEmpty()) {
                 System.err.println("ERROR: Groq API key is not configured!");
+                // this will hapen if the application.properties fil is not filled in
                 return ResponseEntity.status(500).body(
                         Map.of("error", "Groq API key is not configured in application.properties")
                 );
@@ -62,7 +63,7 @@ public class AIController {
             List<Map<String, String>> messages = new ArrayList<>();
             messages.add(Map.of("role", "system", "content", systemPrompt));
 
-            // Add conversation history
+            // Add conversation history as long as it isnt null or empty
             if (request.getConversationHistory() != null && !request.getConversationHistory().isEmpty()) {
                 for (ConversationMessage msg : request.getConversationHistory()) {
                     Map<String, String> messageMap = new HashMap<>();
