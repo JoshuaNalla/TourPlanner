@@ -254,6 +254,77 @@ Try asking your question again in a moment.`
     return date.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' })
   }
 
+  const saveTripPlan = async () => {
+    try {
+      // Prepare the data structure
+      const tripPlanData = {
+        title: tripTitle,
+        description: description,
+        destination: destination,
+        startDate: startDate,
+        endDate: endDate,
+        category: category,
+        travel: {
+          transportationType: transportationType,
+          departureLocation: departureLocation,
+          arrivalLocation: arrivalLocation,
+          departureDateTime: departureDateTime,
+          arrivalDateTime: arrivalDateTime,
+          numberOfTravelers: numberOfTravelers ? parseInt(numberOfTravelers) : null,
+          travelNotes: travelNotes
+        },
+        housing: {
+          accommodationType: accommodationType,
+          accommodationName: accommodationName,
+          address: address,
+          checkInDate: checkInDate,
+          checkOutDate: checkOutDate,
+          numberOfRooms: numberOfRooms ? parseInt(numberOfRooms) : null,
+          accommodationNotes: accommodationNotes
+        },
+        logistics: {
+          budget: budget ? parseFloat(budget) : null,
+          currency: currency,
+          emergencyContact: emergencyContact,
+          emergencyPhone: emergencyPhone,
+          importantDocuments: importantDocuments,
+          additionalNotes: additionalNotes
+        },
+        chatHistory: messages,
+        userId: "temp-user-id", // Replace with actual user ID from auth
+        status: "draft"
+      };
+  
+      console.log("Saving trip plan:", tripPlanData);
+  
+      // Use your existing endpoint
+      const response = await fetch('http://localhost:8080/api/trips/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tripPlanData)
+      });
+  
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to save trip plan: ${errorText}`);
+      }
+  
+      const result = await response.text();
+      console.log("Server response:", result);
+      
+      alert('Trip plan saved successfully!');
+      
+      // Optionally navigate back to home
+      if (goToHome) {
+        goToHome();
+      }
+    } catch (error) {
+      console.error('Error saving trip plan:', error);
+      alert(`Failed to save trip plan: ${error.message}`);
+    }
+  };
   return (
     <div className="create-plan-container" style={{ 
       display: 'flex', 
@@ -805,7 +876,7 @@ Try asking your question again in a moment.`
             >
               Cancel
             </button>
-            <button className="btn btn-primary">Save Plan</button>
+            <button className="btn btn-primary" onClick={saveTripPlan}>Save Plan</button>
           </div>
         </div>
       </div>

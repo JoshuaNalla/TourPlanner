@@ -1,7 +1,7 @@
 import React from 'react'
-import { MapPin, Calendar, Users, Star } from 'lucide-react'
+import { MapPin, Calendar, Users, Star, UserCircle } from 'lucide-react'
 
-const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome, goToRegister, goToLogin}) => {
+const Header = ({isLoggedIn, goToMyTrips, goToCalendar, goToGroups, goToHome, goToRegister, goToLogin, goToAccount}) => {
   return (
     <header style={{
       background: 'rgba(255, 255, 255, 0.1)',
@@ -56,20 +56,25 @@ const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome, goToRegister, 
             color: 'white',
             fontSize: '14px'
           }}>
-            <div 
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
-              onClick={goToLogin}
-            >
-              <Users size={16} />
-              <span>Login</span>
-              </div>
-            <div 
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
-              onClick={goToRegister}
-            >
-              <Users size={16} />
-              <span>Register</span>
-              </div>
+            {/* Only show Login and Register buttons when NOT logged in */}
+            {!isLoggedIn && (
+              <>
+                <div 
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
+                  onClick={goToLogin}
+                >
+                  <Users size={16} />
+                  <span>Login</span>
+                </div>
+                <div 
+                  style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
+                  onClick={goToRegister}
+                >
+                  <Users size={16} />
+                  <span>Register</span>
+                </div>
+              </>
+            )}
             <div 
               style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
               onClick={goToMyTrips}
@@ -91,6 +96,16 @@ const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome, goToRegister, 
               <Users size={16} />
               <span>Groups</span> 
             </div>
+            {/* Only show Account button when logged in */}
+            {isLoggedIn && (
+              <div 
+                style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
+                onClick={goToAccount}
+              >
+                <UserCircle size={16} />
+                <span>Account</span> 
+              </div>
+            )}
           </div>
         </div>
       </div>
