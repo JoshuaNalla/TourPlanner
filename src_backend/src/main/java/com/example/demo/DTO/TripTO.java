@@ -30,7 +30,10 @@ import java.util.List;
 public class TripTO {
     private String id;
 
-    // Overview
+
+
+    private String email;
+
     private String title;
     private String description;
     private String destination;
