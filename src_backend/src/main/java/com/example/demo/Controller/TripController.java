@@ -53,7 +53,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api/trips")
 public class TripController {
@@ -101,4 +101,10 @@ public class TripController {
     public String updateTrip(@RequestBody TripTO trip) {
         return tripService.updateTrip(trip);
     }
+
+    @GetMapping("/mytrips/{email}")
+    public List<Trip> getTripsByEmail(@PathVariable String email) {
+        return tripService.getTripsByEmail(email);
+    }
+
 }

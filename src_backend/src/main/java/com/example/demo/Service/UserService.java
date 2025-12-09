@@ -18,6 +18,18 @@ public class UserService {
 
     public String createUser(UserTO userTO) {
         try {
+
+            // Check if email already exists
+            User existingUser = userRepo.findByEmail(userTO.getEmail());
+            if (existingUser != null) {
+                return "Error: Email already registered";
+            }
+
+            if (userTO.getPassword().length() < 7){
+                return "Error: Password must be 8 characters or more.";
+            }
+
+
             String hashedPassword = BCrypt.hashpw(userTO.getPassword(), BCrypt.gensalt());
             User user = User.builder()
                     .email(userTO.getEmail())

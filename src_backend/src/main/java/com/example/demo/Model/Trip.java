@@ -39,6 +39,7 @@ import java.util.List;
 public class Trip {
     @Id
     private String id;
+    private String email;
 
     // Overview (keeping your existing fields)
     private String title;

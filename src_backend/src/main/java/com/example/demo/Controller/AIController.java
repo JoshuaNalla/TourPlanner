@@ -26,7 +26,7 @@ import com.example.demo.DTO.TripContext;
 
 @RestController
 @RequestMapping("/api/ai")
-@CrossOrigin(origins = "http://localhost:3001")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AIController {
 
     @Value("${groq.api.key}")

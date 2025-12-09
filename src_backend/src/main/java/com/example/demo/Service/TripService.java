@@ -96,6 +96,7 @@ public class TripService {
                     .housing(tripTO.getHousing())
                     .logistics(tripTO.getLogistics())
                     .chatHistory(tripTO.getChatHistory())
+                    .email(tripTO.getEmail())
                     .userId(tripTO.getUserId())
                     .status(tripTO.getStatus() != null ? tripTO.getStatus() : "draft")
                     .createdAt(LocalDateTime.now())
@@ -149,6 +150,7 @@ public class TripService {
                     .housing(tripTO.getHousing())
                     .logistics(tripTO.getLogistics())
                     .chatHistory(tripTO.getChatHistory())
+                    .email(tripTO.getEmail())
                     .userId(tripTO.getUserId())
                     .status(tripTO.getStatus())
                     .updatedAt(LocalDateTime.now())
@@ -178,4 +180,10 @@ public class TripService {
         // You'll need to add this method to TripRepository
         return tripRepo.findByUserId(userId);
     }
+
+    public List<Trip> getTripsByEmail(String email) {
+        return tripRepo.findByEmail(email);
+    }
+
+
 }
