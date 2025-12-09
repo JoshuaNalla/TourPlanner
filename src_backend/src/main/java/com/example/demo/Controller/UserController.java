@@ -43,4 +43,13 @@ public class UserController {
     public String updateUser(@RequestBody UserTO userTO) {
         return userService.updateUser(userTO);
     }
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean login(@RequestBody UserTO userTO) {
+        boolean result = userService.loginUser(userTO.getEmail(), userTO.getPassword());
+        System.out.println("Successful Login: " + result);
+        return result;
+    }
+
 }

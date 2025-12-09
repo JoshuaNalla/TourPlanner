@@ -101,4 +101,10 @@ public class TripController {
     public String updateTrip(@RequestBody TripTO trip) {
         return tripService.updateTrip(trip);
     }
+
+    @GetMapping("/mytrips/{email}")
+    public List<Trip> getTripsByEmail(@PathVariable String email) {
+        return tripService.getTripsByEmail(email);
+    }
+
 }

@@ -74,14 +74,14 @@ function App() {
         goToLogin={() => setPage("Login")}
         goToAccount={() => setPage("Account")}
       />
-      {page === "MyTrips" && <MyTrips />}
+      {page === "MyTrips" && <MyTrips userEmail={userEmail} />}
       {page === "Calendar" && <Calendar />}
       {page === "Groups" && <Groups/>}
       {page === "TripDetails" && selectedTrip && <TripDetails trip = {selectedTrip} />}
       {page === "Register" && <Register isLoggedIn={isLoggedIn} onRegisterSuccess={(email) => handleLoginSuccess(email)} goToHome={() => setPage("Home")} />}
       {page === "Login" && <Login isLoggedIn={isLoggedIn} onLoginSuccess={(email) => handleLoginSuccess(email)} goToRegister={() => setPage("Register")} goToHome={() => setPage("Home")} />}
       {page === "Account" && <Account userEmail={userEmail} onLogout={handleLogout} goToHome={() => setPage("Home")} />}
-      {page === "CreateNewPlan" && <CreateNewPlan goToHome={() => setPage("Home")} />}
+      {page === "CreateNewPlan" && <CreateNewPlan userEmail = {userEmail} goToHome={() => setPage("Home")} />}
       {page === "Home" && (
         <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
         <SearchAndFilter 

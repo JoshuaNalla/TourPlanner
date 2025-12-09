@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { MapPin, Plane, Home, Settings, ArrowLeft, MessageCircle, Send } from 'lucide-react'
 
-const CreateNewPlan = ({ goToHome }) => {
+const CreateNewPlan = ({userEmail, goToHome }) => {
   const [activeTab, setActiveTab] = useState('overview')
   // variables declared here
   // Overview state
@@ -79,78 +79,7 @@ const CreateNewPlan = ({ goToHome }) => {
     }
   }
 
-//   // Send message to AI
-//   const sendMessage = async () => {
-//     if (!inputMessage.trim() || isLoading) return
 
-//     const userMessage = inputMessage.trim()
-//     setInputMessage('')
-    
-//     // Add user message to chat
-//     const newMessages = [...messages, { role: 'user', content: userMessage }]
-//     setMessages(newMessages)
-//     setIsLoading(true)
-
-//     try {
-//       // Get trip context
-//       const tripContext = getTripContext()
-      
-//       // Prepare the prompt with context
-//       const contextPrompt = `You are a helpful AI travel assistant. The user is planning a trip with the following details:
-// ${tripContext.tripTitle ? `Trip Title: ${tripContext.tripTitle}` : ''}
-// ${tripContext.destination ? `Destination: ${tripContext.destination}` : ''}
-// ${tripContext.startDate ? `Start Date: ${tripContext.startDate}` : ''}
-// ${tripContext.endDate ? `End Date: ${tripContext.endDate}` : ''}
-// ${tripContext.description ? `Description: ${tripContext.description}` : ''}
-// ${tripContext.category ? `Category: ${tripContext.category}` : ''}
-// ${tripContext.transportationType ? `Transportation: ${tripContext.transportationType}` : ''}
-// ${tripContext.budget ? `Budget: ${tripContext.currency} ${tripContext.budget}` : ''}
-
-// User's question: ${userMessage}
-
-// Please provide a helpful, friendly response about their trip planning.`
-
-//       // TODO: Replace this with your actual GPT/AI API endpoint
-//       // Example API call structure:
-//       // done?
-//       console.log("sending message...");
-//       const response = await fetch('http://localhost:8080/api/ai/chat', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//           message: userMessage,
-//           context: tripContext,
-//           conversationHistory: newMessages.slice(-5)
-//         })
-//       })
-//       console.log("response:", response);
-//       if (!response.ok) {
-//         throw new Error('Failed to get AI response')
-//       }
-
-//       const data = await response.json()
-//       const aiResponse = data.response || data.message || "I'm sorry, I couldn't process that request. Please try again."
-
-//       setMessages([...newMessages, { role: 'assistant', content: aiResponse }])
-//     } catch (error) {
-//       console.error('Error sending message:', error)
-//       // Fallback response if API is not available
-//       const fallbackResponse = `I understand you're asking about "${userMessage}". As your AI travel assistant, I'm here to help! 
-
-// However, I notice the AI service isn't currently connected. To enable full AI assistance, please configure your GPT wrapper API endpoint at 'http://localhost:8080/api/ai/chat'.
-
-// In the meantime, I can help you think through your trip planning. What specific aspect would you like to discuss?`
-      
-//       setMessages([...newMessages, { role: 'assistant', content: fallbackResponse }])
-//     } finally {
-//       setIsLoading(false)
-//     }
-//   }
-
-// send message version 2:
-// Send message to AI
 const sendMessage = async () => {
   if (!inputMessage.trim() || isLoading) return
 
@@ -258,6 +187,7 @@ Try asking your question again in a moment.`
     try {
       // Prepare the data structure
       const tripPlanData = {
+        email: userEmail,
         title: tripTitle,
         description: description,
         destination: destination,

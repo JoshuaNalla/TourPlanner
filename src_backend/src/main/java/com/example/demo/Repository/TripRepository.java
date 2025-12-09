@@ -20,4 +20,5 @@ import java.util.List;
 public interface TripRepository extends MongoRepository<Trip, String> {
     // NEW: Add this method
     List<Trip> findByUserId(String userId);
+    List<Trip> findByEmail(String email);
 }

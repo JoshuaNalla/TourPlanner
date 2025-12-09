@@ -28,16 +28,28 @@ const handleSubmit = async (e) => {
       throw new Error("Registration failed");
     }
 
-    const data = await response.json();
+    const data = await response.text();
     console.log("Registration success:", data);
     
     // Set logged in state and redirect after successful registration with email
-    if (onRegisterSuccess) {
-      onRegisterSuccess(inputEmail || "user@example.com");
+    if (data.includes("Successfully")){
+      if (onRegisterSuccess) {
+        onRegisterSuccess(inputEmail || "user@example.com");
+      }
+      if (goToHome) {
+        goToHome();
+      }
     }
-    if (goToHome) {
-      goToHome();
+    else if (data.includes("registered")){
+      alert(data);
     }
+    else if (data.includes("Password")){
+      alert(data);
+    }
+    else{
+      alert("Issue: " + data);
+    }
+    
 
   } catch (error) {
     console.error("Error:", error);

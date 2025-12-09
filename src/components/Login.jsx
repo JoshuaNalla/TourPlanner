@@ -16,7 +16,7 @@ const handleSubmit = async (e) => {
 
   try {
     const response = await fetch("http://localhost:8080/api/users/login", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
@@ -32,12 +32,18 @@ const handleSubmit = async (e) => {
     console.log("Login success:", data);
     
     // Set logged in state and redirect with email
-    if (onLoginSuccess) {
+    if (data == true){
+      if (onLoginSuccess) {
       onLoginSuccess(inputEmail || "user@example.com");
+      }
+      if (goToHome) {
+        goToHome();
+      }
     }
-    if (goToHome) {
-      goToHome();
+    else{
+      alert("Invalid email or password. Please try again.");
     }
+    
 
   } catch (error) {
     console.error("Error:", error);
