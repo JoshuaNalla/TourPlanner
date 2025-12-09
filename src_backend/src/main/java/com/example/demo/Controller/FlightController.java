@@ -36,7 +36,7 @@ public class FlightController {
     @Value("${flight.api.url}")
     private static String flightApiUrl;
 
-    @GetMapping("/cities/{city}")
+    @GetMapping("/cities")
     public ResponseEntity<?> getAirport(@PathVariable String city) {
 
         System.out.println("=== AviationStack Request ===");
