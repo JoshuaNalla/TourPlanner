@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { MapPin, Plane, Home, Settings, ArrowLeft, MessageCircle, Send } from 'lucide-react'
+import { MapPin, Plane, Home, Settings, ArrowLeft, MessageCircle, Send, Search } from 'lucide-react'
 
 const CreateNewPlan = ({userEmail, goToHome }) => {
   const [activeTab, setActiveTab] = useState('overview')
@@ -37,6 +37,15 @@ const CreateNewPlan = ({userEmail, goToHome }) => {
   const [emergencyPhone, setEmergencyPhone] = useState('')
   const [importantDocuments, setImportantDocuments] = useState('')
   const [additionalNotes, setAdditionalNotes] = useState('')
+
+
+  // flight stuff:
+  // Add these with your other state declarations (around line 28)
+const [availableFlights, setAvailableFlights] = useState([])
+const [selectedFlight, setSelectedFlight] = useState(null)
+const [loadingFlights, setLoadingFlights] = useState(false)
+const [flightError, setFlightError] = useState('')
+//
 
   //++++++++++++++AI portion starts here++++++++++++++
   // Chat state
@@ -152,6 +161,84 @@ Try asking your question again in a moment.`
   }
 }
   //++++++++++++++AI portion ends here++++++++++++++
+
+  // flight stuff:
+  // Add these functions before sendMessage (around line 90)
+
+// Fetch ICAO codes for cities
+const fetchIcaoCode = async (cityName) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/flights/airports?city=${encodeURIComponent(cityName)}`)
+    if (!response.ok) throw new Error('Failed to fetch airport info')
+    
+    const airports = await response.json()
+    if (airports && airports.length > 0) {
+      return airports[0].icao || airports[0].iata_code
+    }
+    return null
+  } catch (error) {
+    console.error('Error fetching ICAO code:', error)
+    return null
+  }
+}
+
+// Search for available flights
+const searchFlights = async () => {
+  if (!departureLocation || !arrivalLocation) {
+    setFlightError('Please enter both departure and arrival locations')
+    return
+  }
+
+  setLoadingFlights(true)
+  setFlightError('')
+  setAvailableFlights([])
+
+  try {
+    // First, get ICAO codes for both cities
+    const depIcao = await fetchIcaoCode(departureLocation)
+    const arrIcao = await fetchIcaoCode(arrivalLocation)
+
+    if (!depIcao || !arrIcao) {
+      setFlightError('Could not find airport codes for the specified cities')
+      setLoadingFlights(false)
+      return
+    }
+
+    // Now fetch flights
+    const response = await fetch(
+      `http://localhost:8080/api/flights?depIcao=${depIcao}&arrIcao=${arrIcao}`
+    )
+
+    if (!response.ok) throw new Error('Failed to fetch flights')
+
+    const flights = await response.json()
+    
+    if (flights && flights.length > 0) {
+      setAvailableFlights(flights)
+    } else {
+      setFlightError('No flights found for this route')
+    }
+  } catch (error) {
+    console.error('Error searching flights:', error)
+    setFlightError('Error loading flights. Please try again.')
+  } finally {
+    setLoadingFlights(false)
+  }
+}
+
+// Handle flight selection
+const handleSelectFlight = (flight) => {
+  setSelectedFlight(flight)
+  
+  // Auto-fill travel details from selected flight
+  if (flight.departure) {
+    setDepartureLocation(flight.departure.airport || departureLocation)
+  }
+  if (flight.arrival) {
+    setArrivalLocation(flight.arrival.airport || arrivalLocation)
+  }
+}
+////// flight ends here 
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -416,6 +503,14 @@ Try asking your question again in a moment.`
                       <span className="overview-label">Transportation:</span>
                       <span className="overview-value">{transportationType || 'Not set'}</span>
                     </div>
+                    <div className="overview-summary-item clickable" onClick={() => handleNavigateToTab('travel')}>
+  <span className="overview-label">Selected Flight:</span>
+  <span className="overview-value">
+    {selectedFlight 
+      ? `${selectedFlight.airline?.name || 'Unknown'} - ${selectedFlight.flight?.iata || 'N/A'}`
+      : 'Not selected'}
+  </span>
+</div>
                     <div 
                       className="overview-summary-item clickable"
                       onClick={() => handleNavigateToTab('travel')}
@@ -554,89 +649,259 @@ Try asking your question again in a moment.`
             </div>
           )}
 
-          {activeTab === 'travel' && (
-            <div className="create-plan-section">
-              <h2 className="create-plan-section-title">Travel Details</h2>
-              <div className="create-plan-form">
-                <div className="form-group">
-                  <label className="form-label">Transportation Type</label>
-                  <select 
-                    className="form-input"
-                    value={transportationType}
-                    onChange={(e) => setTransportationType(e.target.value)}
+{activeTab === 'travel' && (
+  <div className="create-plan-section">
+    <h2 className="create-plan-section-title">Travel Details</h2>
+    <div className="create-plan-form">
+      <div className="form-group">
+        <label className="form-label">Transportation Type</label>
+        <select 
+          className="form-input"
+          value={transportationType}
+          onChange={(e) => setTransportationType(e.target.value)}
+        >
+          <option value="">Select transportation</option>
+          <option value="flight">Flight</option>
+          <option value="train">Train</option>
+          <option value="car">Car</option>
+          <option value="bus">Bus</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      
+      {/* Flight Search Section */}
+      {transportationType === 'flight' && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+          padding: '24px',
+          borderRadius: '12px',
+          marginBottom: '20px',
+          border: '2px solid rgba(102, 126, 234, 0.1)'
+        }}>
+          <h3 style={{ 
+            fontSize: '18px', 
+            fontWeight: '600', 
+            marginBottom: '16px',
+            color: '#667eea'
+          }}>
+            Search Available Flights
+          </h3>
+          
+          <div className="form-group">
+            <label className="form-label">Departure City</label>
+            <input 
+              type="text" 
+              className="form-input" 
+              placeholder="e.g., New York, London"
+              value={departureLocation}
+              onChange={(e) => setDepartureLocation(e.target.value)}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label className="form-label">Arrival City</label>
+            <input 
+              type="text" 
+              className="form-input" 
+              placeholder="e.g., Paris, Tokyo"
+              value={arrivalLocation}
+              onChange={(e) => setArrivalLocation(e.target.value)}
+            />
+          </div>
+          
+          <button
+            onClick={searchFlights}
+            disabled={loadingFlights || !departureLocation || !arrivalLocation}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '12px 24px',
+              background: loadingFlights ? '#ccc' : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              border: 'none',
+              borderRadius: '12px',
+              color: 'white',
+              fontWeight: '600',
+              cursor: loadingFlights ? 'not-allowed' : 'pointer',
+              transition: 'all 0.3s ease',
+              width: '100%',
+              justifyContent: 'center'
+            }}
+          >
+            <Search size={18} />
+            {loadingFlights ? 'Searching...' : 'Search Flights'}
+          </button>
+          
+          {flightError && (
+            <div style={{
+              marginTop: '12px',
+              padding: '12px',
+              background: '#fee',
+              border: '1px solid #fcc',
+              borderRadius: '8px',
+              color: '#c33',
+              fontSize: '14px'
+            }}>
+              {flightError}
+            </div>
+          )}
+          
+          {/* Available Flights List */}
+          {availableFlights.length > 0 && (
+            <div style={{ marginTop: '20px' }}>
+              <h4 style={{ 
+                fontSize: '16px', 
+                fontWeight: '600', 
+                marginBottom: '12px',
+                color: '#333'
+              }}>
+                Available Flights ({availableFlights.length})
+              </h4>
+              <div style={{
+                maxHeight: '400px',
+                overflowY: 'auto',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px'
+              }}>
+                {availableFlights.map((flight, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleSelectFlight(flight)}
+                    style={{
+                      padding: '16px',
+                      background: selectedFlight === flight ? 'rgba(102, 126, 234, 0.1)' : 'white',
+                      border: selectedFlight === flight ? '2px solid #667eea' : '2px solid #e1e5e9',
+                      borderRadius: '12px',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                      if (selectedFlight !== flight) {
+                        e.currentTarget.style.borderColor = '#667eea'
+                        e.currentTarget.style.transform = 'translateY(-2px)'
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)'
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (selectedFlight !== flight) {
+                        e.currentTarget.style.borderColor = '#e1e5e9'
+                        e.currentTarget.style.transform = 'translateY(0)'
+                        e.currentTarget.style.boxShadow = 'none'
+                      }
+                    }}
                   >
-                    <option value="">Select transportation</option>
-                    <option value="flight">Flight</option>
-                    <option value="train">Train</option>
-                    <option value="car">Car</option>
-                    <option value="bus">Bus</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Departure Location</label>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Enter departure location"
-                    value={departureLocation}
-                    onChange={(e) => setDepartureLocation(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Arrival Location</label>
-                  <input 
-                    type="text" 
-                    className="form-input" 
-                    placeholder="Enter arrival location"
-                    value={arrivalLocation}
-                    onChange={(e) => setArrivalLocation(e.target.value)}
-                  />
-                </div>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label className="form-label">Departure Date & Time</label>
-                    <input 
-                      type="datetime-local" 
-                      className="form-input"
-                      value={departureDateTime}
-                      onChange={(e) => setDepartureDateTime(e.target.value)}
-                    />
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ 
+                          fontSize: '16px', 
+                          fontWeight: '600', 
+                          color: '#333',
+                          marginBottom: '8px'
+                        }}>
+                          {flight.airline?.name || 'Unknown Airline'}
+                        </div>
+                        <div style={{ 
+                          fontSize: '14px', 
+                          color: '#666',
+                          marginBottom: '4px'
+                        }}>
+                          Flight: {flight.flight?.iata || flight.flight?.icao || 'N/A'}
+                        </div>
+                        <div style={{ 
+                          fontSize: '13px', 
+                          color: '#888',
+                          display: 'flex',
+                          gap: '16px',
+                          marginTop: '8px'
+                        }}>
+                          <span>
+                            <strong>From:</strong> {flight.departure?.airport || departureLocation}
+                          </span>
+                          <span>→</span>
+                          <span>
+                            <strong>To:</strong> {flight.arrival?.airport || arrivalLocation}
+                          </span>
+                        </div>
+                      </div>
+                      <div style={{
+                        padding: '6px 12px',
+                        background: flight.flight_status === 'scheduled' ? '#d4edda' : '#fff3cd',
+                        color: flight.flight_status === 'scheduled' ? '#155724' : '#856404',
+                        borderRadius: '8px',
+                        fontSize: '12px',
+                        fontWeight: '600',
+                        textTransform: 'capitalize'
+                      }}>
+                        {flight.flight_status || 'Unknown'}
+                      </div>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label">Arrival Date & Time</label>
-                    <input 
-                      type="datetime-local" 
-                      className="form-input"
-                      value={arrivalDateTime}
-                      onChange={(e) => setArrivalDateTime(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Number of Travelers</label>
-                  <input 
-                    type="number" 
-                    className="form-input" 
-                    placeholder="Enter number of travelers" 
-                    min="1"
-                    value={numberOfTravelers}
-                    onChange={(e) => setNumberOfTravelers(e.target.value)}
-                  />
-                </div>
-                <div className="form-group">
-                  <label className="form-label">Travel Notes</label>
-                  <textarea 
-                    className="form-textarea" 
-                    rows="3" 
-                    placeholder="Any additional travel notes..."
-                    value={travelNotes}
-                    onChange={(e) => setTravelNotes(e.target.value)}
-                  ></textarea>
-                </div>
+                ))}
               </div>
             </div>
           )}
+          
+          {selectedFlight && (
+            <div style={{
+              marginTop: '16px',
+              padding: '12px',
+              background: '#d4edda',
+              border: '1px solid #c3e6cb',
+              borderRadius: '8px',
+              color: '#155724',
+              fontSize: '14px'
+            }}>
+              ✓ Flight selected: {selectedFlight.airline?.name} - {selectedFlight.flight?.iata}
+            </div>
+          )}
+        </div>
+      )}
+      
+      <div className="form-row">
+        <div className="form-group">
+          <label className="form-label">Departure Date & Time</label>
+          <input 
+            type="datetime-local" 
+            className="form-input"
+            value={departureDateTime}
+            onChange={(e) => setDepartureDateTime(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label className="form-label">Arrival Date & Time</label>
+          <input 
+            type="datetime-local" 
+            className="form-input"
+            value={arrivalDateTime}
+            onChange={(e) => setArrivalDateTime(e.target.value)}
+          />
+        </div>
+      </div>
+      <div className="form-group">
+        <label className="form-label">Number of Travelers</label>
+        <input 
+          type="number" 
+          className="form-input" 
+          placeholder="Enter number of travelers" 
+          min="1"
+          value={numberOfTravelers}
+          onChange={(e) => setNumberOfTravelers(e.target.value)}
+        />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Travel Notes</label>
+        <textarea 
+          className="form-textarea" 
+          rows="3" 
+          placeholder="Any additional travel notes..."
+          value={travelNotes}
+          onChange={(e) => setTravelNotes(e.target.value)}
+        ></textarea>
+      </div>
+    </div>
+  </div>
+)}
 
           {activeTab === 'housing' && (
             <div className="create-plan-section">
