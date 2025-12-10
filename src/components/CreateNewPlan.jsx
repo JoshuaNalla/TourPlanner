@@ -182,58 +182,147 @@ Try asking your question again in a moment.`
 //   }
 // }
 
+// const fetchIcaoCode = async (cityName) => {
+//   try {
+//     const response = await fetch(`http://localhost:8080/api/flights/airports?city=${encodeURIComponent(cityName)}`)
+//     if (!response.ok) throw new Error('Failed to fetch airport info')
+    
+//     const airports = await response.json()
+//     if (airports && airports.length > 0) {
+//       // Use IATA code instead of ICAO
+//       return airports[0].iata_code
+//     }
+//     return null
+//   } catch (error) {
+//     console.error('Error fetching airport code:', error)
+//     return null
+//   }
+// }
+
 const fetchIcaoCode = async (cityName) => {
   try {
+    console.log(`Fetching airport code for city: "${cityName}"`)
+    
     const response = await fetch(`http://localhost:8080/api/flights/airports?city=${encodeURIComponent(cityName)}`)
     if (!response.ok) throw new Error('Failed to fetch airport info')
     
     const airports = await response.json()
+    console.log('Airports response:', airports)
+    
     if (airports && airports.length > 0) {
-      // Use IATA code instead of ICAO
-      return airports[0].iata_code
+      const code = airports[0].iata_code
+      console.log(`Found IATA code: "${code}" for city: "${cityName}"`)
+      return code
     }
+    
+    console.log(`No airports found for city: "${cityName}"`)
     return null
   } catch (error) {
     console.error('Error fetching airport code:', error)
     return null
   }
 }
-
 // Search for available flights
+// const searchFlights = async () => {
+//   if (!departureLocation || !arrivalLocation) {
+//     setFlightError('Please enter both departure and arrival locations')
+//     return
+//   }
+
+//   setLoadingFlights(true)
+//   setFlightError('')
+//   setAvailableFlights([])
+
+//   try {
+//     // First, get ICAO codes for both cities
+//     const depIcao = await fetchIcaoCode(departureLocation)
+//     const arrIcao = await fetchIcaoCode(arrivalLocation)
+
+//     if (!depIcao || !arrIcao) {
+//       setFlightError('Could not find airport codes for the specified cities')
+//       setLoadingFlights(false)
+//       return
+//     }
+
+//     // Now fetch flights
+//     const response = await fetch(
+//       `http://localhost:8080/api/flights?depIcao=${depIcao}&arrIcao=${arrIcao}`
+//     )
+
+//     if (!response.ok) throw new Error('Failed to fetch flights')
+
+//     const flights = await response.json()
+    
+//     if (flights && flights.length > 0) {
+//       setAvailableFlights(flights)
+//     } else {
+//       setFlightError('No flights found for this route')
+//     }
+//   } catch (error) {
+//     console.error('Error searching flights:', error)
+//     setFlightError('Error loading flights. Please try again.')
+//   } finally {
+//     setLoadingFlights(false)
+//   }
+// }
+
 const searchFlights = async () => {
   if (!departureLocation || !arrivalLocation) {
     setFlightError('Please enter both departure and arrival locations')
     return
   }
 
+  console.log('=== Starting Flight Search ===')
+  console.log('Departure Location:', departureLocation)
+  console.log('Arrival Location:', arrivalLocation)
+
   setLoadingFlights(true)
   setFlightError('')
   setAvailableFlights([])
 
   try {
-    // First, get ICAO codes for both cities
-    const depIcao = await fetchIcaoCode(departureLocation)
-    const arrIcao = await fetchIcaoCode(arrivalLocation)
+    // First, get IATA codes for both cities
+    console.log('Step 1: Fetching departure airport code...')
+    const depCode = await fetchIcaoCode(departureLocation)
+    console.log('Departure Code Result:', depCode)
+    
+    console.log('Step 2: Fetching arrival airport code...')
+    const arrCode = await fetchIcaoCode(arrivalLocation)
+    console.log('Arrival Code Result:', arrCode)
 
-    if (!depIcao || !arrIcao) {
+    if (!depCode || !arrCode) {
       setFlightError('Could not find airport codes for the specified cities')
       setLoadingFlights(false)
       return
     }
 
+    console.log(`Step 3: Searching flights from ${depCode} to ${arrCode}`)
+
     // Now fetch flights
-    const response = await fetch(
-      `http://localhost:8080/api/flights?depIcao=${depIcao}&arrIcao=${arrIcao}`
-    )
+    const flightUrl = `http://localhost:8080/api/flights?depIcao=${depCode}&arrIcao=${arrCode}`
+    console.log('Flight API URL:', flightUrl)
+    
+    const response = await fetch(flightUrl)
 
-    if (!response.ok) throw new Error('Failed to fetch flights')
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Flight API Error:', errorText)
+      throw new Error('Failed to fetch flights')
+    }
 
-    const flights = await response.json()
+    const data = await response.json()
+    console.log('Flight API Response:', data)
+    
+    // Handle both array response and object response
+    const flights = Array.isArray(data) ? data : (data.flights || [])
     
     if (flights && flights.length > 0) {
       setAvailableFlights(flights)
+      console.log(`Found ${flights.length} flights`)
     } else {
-      setFlightError('No flights found for this route')
+      const message = data.message || data.suggestion || 'No flights found for this route'
+      setFlightError(message)
+      console.log('No flights found:', message)
     }
   } catch (error) {
     console.error('Error searching flights:', error)
@@ -242,6 +331,7 @@ const searchFlights = async () => {
     setLoadingFlights(false)
   }
 }
+
 
 // Handle flight selection
 const handleSelectFlight = (flight) => {
