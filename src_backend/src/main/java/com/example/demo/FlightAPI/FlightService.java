@@ -19,10 +19,32 @@ public class FlightService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+//    public List<AirportInfo> getAirportsByCity(String city) {
+//
+//        String url = apiUrl +
+//                "/cities?city_name=" + city +
+//                "&access_key=" + apiKey;
+//
+//        try {
+//            AviationStackResponse response =
+//                    restTemplate.getForObject(url, AviationStackResponse.class);
+//
+//            return response != null ? response.getData() : List.of();
+//
+//        } catch (HttpClientErrorException e) {
+//            throw new RuntimeException("Client error: " + e.getResponseBodyAsString());
+//        } catch (HttpServerErrorException e) {
+//            throw new RuntimeException("Server error: " + e.getResponseBodyAsString());
+//        } catch (Exception e) {
+//            throw new RuntimeException("Unexpected error: " + e.getMessage());
+//        }
+//    }
+
     public List<AirportInfo> getAirportsByCity(String city) {
 
+        // CHANGE THIS LINE - use /airports instead of /cities
         String url = apiUrl +
-                "/cities?city_name=" + city +
+                "/airports?search=" + city +  // Use 'search' parameter
                 "&access_key=" + apiKey;
 
         try {

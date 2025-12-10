@@ -173,7 +173,7 @@ const fetchIcaoCode = async (cityName) => {
     
     const airports = await response.json()
     if (airports && airports.length > 0) {
-      return airports[0].icao || airports[0].iata_code
+      return airports[0].icao_code || airports[0].iata_code
     }
     return null
   } catch (error) {

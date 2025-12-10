@@ -3,9 +3,17 @@ package com.example.demo.FlightAPI;
 public class AirportInfo {
     private String city_name;
     private String iata_code;
+    private String icao_code; // i added this
     private String airport_name;
     private String country_name;
     // getters/setters
+
+    public String getIcao_code() {
+        return icao_code;
+    }
+    public void setIcao_code(String icao_code) {
+        this.icao_code = icao_code;
+    }
 
     public String getCity_name() {
         return city_name;
