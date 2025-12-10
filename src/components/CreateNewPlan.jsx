@@ -165,7 +165,23 @@ Try asking your question again in a moment.`
   // flight stuff:
   // Add these functions before sendMessage (around line 90)
 
-// Fetch ICAO codes for cities
+// // Fetch ICAO codes for cities
+// const fetchIcaoCode = async (cityName) => {
+//   try {
+//     const response = await fetch(`http://localhost:8080/api/flights/airports?city=${encodeURIComponent(cityName)}`)
+//     if (!response.ok) throw new Error('Failed to fetch airport info')
+    
+//     const airports = await response.json()
+//     if (airports && airports.length > 0) {
+//       return airports[0].icao_code || airports[0].iata_code
+//     }
+//     return null
+//   } catch (error) {
+//     console.error('Error fetching ICAO code:', error)
+//     return null
+//   }
+// }
+
 const fetchIcaoCode = async (cityName) => {
   try {
     const response = await fetch(`http://localhost:8080/api/flights/airports?city=${encodeURIComponent(cityName)}`)
@@ -173,11 +189,12 @@ const fetchIcaoCode = async (cityName) => {
     
     const airports = await response.json()
     if (airports && airports.length > 0) {
-      return airports[0].icao_code || airports[0].iata_code
+      // Use IATA code instead of ICAO
+      return airports[0].iata_code
     }
     return null
   } catch (error) {
-    console.error('Error fetching ICAO code:', error)
+    console.error('Error fetching airport code:', error)
     return null
   }
 }
