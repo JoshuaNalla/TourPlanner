@@ -26,6 +26,7 @@ export default function MyTrips() {
 */
 
 import { useEffect, useState } from 'react'
+import TripPlanCard from './TripPlanCard'   // import your card component
 
 export default function MyTrips({ userEmail }) {
   const [trips, setTrips] = useState([]);
@@ -42,22 +43,34 @@ export default function MyTrips({ userEmail }) {
     }
   }, [userEmail]);
 
+  const goToTripDetails = (tripId) => {
+    // navigate to trip details page
+    // e.g. using React Router: navigate(`/trip/${tripId}`)
+    console.log("Go to trip details:", tripId);
+  };
+
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h1>My Trips</h1>
       {trips.length === 0 ? (
         <p>No trips found.</p>
       ) : (
-        <ul>
+        <div 
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '20px',
+            marginTop: '20px'
+          }}
+        >
           {trips.map(trip => (
-            <li key={trip.id}>
-              <h2>{trip.title}</h2>
-              <p>{trip.description}</p>
-              <p>Destination: {trip.destination}</p>
-              <p>Dates: {trip.startDate} – {trip.endDate}</p>
-            </li>
+            <TripPlanCard 
+              key={trip.id} 
+              tripPlan={trip} 
+              goToTripDetails={() => goToTripDetails(trip.id)} 
+            />
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

@@ -24,16 +24,17 @@ const TripPlanCard = ({ tripPlan, goToTripDetails }) => {
     }
   }
 
+  // derive values safely
+  const duration = tripPlan.startDate && tripPlan.endDate
+    ? Math.max(1, (new Date(tripPlan.endDate) - new Date(tripPlan.startDate)) / (1000*60*60*24))
+    : null;
+
+  const travelers = tripPlan.travel?.numberOfTravelers || null;
+  const budget = tripPlan.logistics?.budget || null;
+
   return (
-    <div className="card" style={{
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      cursor: 'pointer',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
-      {/* Image Header */}
+    <div className="card" style={{ display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
+      {/* Header */}
       <div style={{
         height: '200px',
         background: `linear-gradient(135deg, ${getCategoryColor(tripPlan.category)}20, ${getCategoryColor(tripPlan.category)}40)`,
@@ -45,9 +46,8 @@ const TripPlanCard = ({ tripPlan, goToTripDetails }) => {
         justifyContent: 'center',
         fontSize: '48px'
       }}>
-        {tripPlan.imageEmoji}
-        
-        {/* Category Badge */}
+        {/* fallback emoji */}
+        {tripPlan.imageEmoji || "🌍"}
         <div style={{
           position: 'absolute',
           top: '12px',
@@ -63,141 +63,32 @@ const TripPlanCard = ({ tripPlan, goToTripDetails }) => {
           gap: '4px'
         }}>
           {getCategoryIcon(tripPlan.category)}
-          {tripPlan.category.charAt(0).toUpperCase() + tripPlan.category.slice(1)}
+          {tripPlan.category}
         </div>
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <h3 style={{
-          fontSize: '20px',
-          fontWeight: '600',
-          color: '#333',
-          marginBottom: '8px',
-          lineHeight: '1.3'
-        }}>
-          {tripPlan.title}
-        </h3>
+      <h3>{tripPlan.title}</h3>
+      <p>{tripPlan.description}</p>
 
-        <p style={{
-          color: '#666',
-          fontSize: '14px',
-          lineHeight: '1.5',
-          marginBottom: '16px',
-          flex: 1
-        }}>
-          {tripPlan.description}
-        </p>
-
-        {/* Trip Details */}
-        <div style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px',
-          marginBottom: '20px'
-        }}>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#666',
-            fontSize: '14px'
-          }}>
-            <MapPin size={14} />
-            <span>{tripPlan.destination}</span>
-          </div>
-          
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#666',
-            fontSize: '14px'
-          }}>
-            <Calendar size={14} />
-            <span>{tripPlan.startDate} - {tripPlan.endDate}</span>
-          </div>
-          
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#666',
-            fontSize: '14px'
-          }}>
-            <Clock size={14} />
-            <span>{tripPlan.duration} days</span>
-          </div>
-          
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            color: '#666',
-            fontSize: '14px'
-          }}>
-            <Users size={14} />
-            <span>{tripPlan.travelers} travelers</span>
-          </div>
-        </div>
-
-        {/* Budget */}
-        <div style={{
-          background: 'linear-gradient(135deg, #f8f9fa, #e9ecef)',
-          padding: '12px',
-          borderRadius: '8px',
-          marginBottom: '16px'
-        }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
-            <span style={{
-              fontSize: '14px',
-              color: '#666',
-              fontWeight: '500'
-            }}>
-              Budget
-            </span>
-            <span style={{
-              fontSize: '18px',
-              fontWeight: '700',
-              color: '#333'
-            }}>
-              ${tripPlan.budget.toLocaleString()}
-            </span>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div style={{
-          display: 'flex',
-          gap: '12px'
-        }}>
-          <button className="btn btn-primary" style={{
-            flex: 1,
-            padding: '12px',
-            fontSize: '14px'
-          }}
-          onClick={goToTripDetails}
-          >
-            View Details 
-          </button>
-
-          <button className="btn btn-secondary" style={{
-            padding: '12px',
-            fontSize: '14px',
-            background: 'rgba(102, 126, 234, 0.1)',
-            color: '#667eea',
-            border: '1px solid rgba(102, 126, 234, 0.2)'
-          }}>
-            Edit
-          </button>
-        </div>
+      <div>
+        <div><MapPin size={14}/> {tripPlan.destination}</div>
+        <div><Calendar size={14}/> {tripPlan.startDate} – {tripPlan.endDate}</div>
+        {duration && <div><Clock size={14}/> {duration} days</div>}
+        {travelers && <div><Users size={14}/> {travelers} travelers</div>}
       </div>
+
+      {budget !== null && (
+        <div>
+          <span>Budget:</span>
+          <strong>${budget.toLocaleString()}</strong>
+        </div>
+      )}
+
+      
     </div>
   )
 }
+
 
 export default TripPlanCard
