@@ -66,10 +66,6 @@ public class UserService {
         return userList;
     }
 
-    public User getUserByEmail(String email) {
-        return userRepo.findByEmail(email);
-    }
-
     public String deleteUser(String id) {
         try {
             userRepo.deleteById(id);

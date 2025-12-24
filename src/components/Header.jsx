@@ -1,7 +1,11 @@
 import React from 'react'
 import { MapPin, Calendar, Users, Star, UserCircle } from 'lucide-react'
 
+<<<<<<< HEAD
 const Header = ({isLoggedIn, goToMyTrips, goToCalendar, goToGroups, goToHome, goToRegister, goToLogin, goToAccount}) => {
+=======
+const Header = ({goToMyTrips, goToCalendar, goToGroups, goToHome}) => {
+>>>>>>> parent of cd3c60d (final commit)
   return (
     <header style={{
       background: 'rgba(255, 255, 255, 0.1)',
@@ -56,6 +60,7 @@ const Header = ({isLoggedIn, goToMyTrips, goToCalendar, goToGroups, goToHome, go
             color: 'white',
             fontSize: '14px'
           }}>
+<<<<<<< HEAD
             {/* Only show Login and Register buttons when NOT logged in */}
             {!isLoggedIn && (
               <>
@@ -75,6 +80,8 @@ const Header = ({isLoggedIn, goToMyTrips, goToCalendar, goToGroups, goToHome, go
                 </div>
               </>
             )}
+=======
+>>>>>>> parent of cd3c60d (final commit)
             <div 
               style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: "pointer" }}
               onClick={goToMyTrips}

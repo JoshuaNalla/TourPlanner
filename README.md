@@ -40,7 +40,6 @@ when running this file, be sure to include the database url as well as the ai ke
 npm install
 install maven (brew install maven, sudo apt install maven, etc.)
 
-
 2. Start the development servers:
 npm run dev
 mvn -f ./src_backend/pom.xml spring-boot:run

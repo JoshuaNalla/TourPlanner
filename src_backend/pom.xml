@@ -68,7 +68,10 @@
             <artifactId>spring-boot-starter-webmvc-test</artifactId>
             <scope>test</scope>
         </dependency>
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of cd3c60d (final commit)
     </dependencies>
 
     <build>
