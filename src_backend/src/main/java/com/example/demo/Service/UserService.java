@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 @Service
 public class UserService {
     @Autowired
@@ -16,9 +18,22 @@ public class UserService {
 
     public String createUser(UserTO userTO) {
         try {
+
+            // Check if email already exists
+            User existingUser = userRepo.findByEmail(userTO.getEmail());
+            if (existingUser != null) {
+                return "Error: Email already registered";
+            }
+
+            if (userTO.getPassword().length() < 7){
+                return "Error: Password must be 8 characters or more.";
+            }
+
+
+            String hashedPassword = BCrypt.hashpw(userTO.getPassword(), BCrypt.gensalt());
             User user = User.builder()
                     .email(userTO.getEmail())
-                    .password(userTO.getPassword())
+                    .password(hashedPassword)
                     .build();
             userRepo.save(user);
 
@@ -30,6 +45,17 @@ public class UserService {
         return "User Created Successfully";
     }
 
+    public boolean loginUser(String email, String password) {
+        User user = userRepo.findByEmail(email);
+        if (user == null) {
+            System.out.println("User not found.");
+            return false;
+        }
+
+
+        return BCrypt.checkpw(password, user.getPassword());
+    }
+
     public List<User> getUsers() {
         List<User> userList = new ArrayList<>();
         try {
@@ -38,10 +64,6 @@ public class UserService {
         }
 
         return userList;
-    }
-
-    public User getUserByEmail(String email) {
-        return userRepo.findByEmail(email);
     }
 
     public String deleteUser(String id) {

@@ -7,7 +7,13 @@ import MyTrips from "./components/MyTrips"
 import Calendar from "./components/Calendar"
 import Groups from "./components/Groups"
 import TripDetails from "./components/TripDetails"
+<<<<<<< HEAD
 import Register from "./components/Register"
+import Login from "./components/Login"
+import CreateNewPlan from "./components/CreateNewPlan"
+import Account from "./components/Account"
+=======
+>>>>>>> parent of cd3c60d (final commit)
 
 function App() {
   const [tripPlans, setTripPlans] = useState(sampleTripPlans)
@@ -16,6 +22,8 @@ function App() {
   const [filterCategory, setFilterCategory] = useState('all')
   const [page, setPage] = useState("Home")
   const [selectedTrip, setSelectedTrip] = useState(null)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [userEmail, setUserEmail] = useState(null)
 
   const handleSearch = (term) => {
     setSearchTerm(term)
@@ -47,19 +55,43 @@ function App() {
     setFilteredPlans(filtered)
   }
 
+  const handleLogout = () => {
+    setIsLoggedIn(false)
+    setUserEmail(null)
+  }
+
+  const handleLoginSuccess = (email) => {
+    setIsLoggedIn(true)
+    setUserEmail(email)
+  }
+
   return (
     <div className="App">
-      <Header goToMyTrips={() => setPage("MyTrips")} 
+      <Header 
+        isLoggedIn={isLoggedIn}
+        goToMyTrips={() => setPage("MyTrips")} 
         goToCalendar={() => setPage("Calendar")}
         goToGroups={() => setPage("Groups")} 
+<<<<<<< HEAD
         goToHome={() => setPage("Home")}
         goToRegister={() => setPage("Register")}
+        goToLogin={() => setPage("Login")}
+        goToAccount={() => setPage("Account")}
+=======
+        goToHome={() => setPage("Home")} 
+>>>>>>> parent of cd3c60d (final commit)
       />
-      {page === "MyTrips" && <MyTrips />}
+      {page === "MyTrips" && <MyTrips userEmail={userEmail} />}
       {page === "Calendar" && <Calendar />}
       {page === "Groups" && <Groups/>}
       {page === "TripDetails" && selectedTrip && <TripDetails trip = {selectedTrip} />}
-      {page === "Register" && <Register />}
+<<<<<<< HEAD
+      {page === "Register" && <Register isLoggedIn={isLoggedIn} onRegisterSuccess={(email) => handleLoginSuccess(email)} goToHome={() => setPage("Home")} />}
+      {page === "Login" && <Login isLoggedIn={isLoggedIn} onLoginSuccess={(email) => handleLoginSuccess(email)} goToRegister={() => setPage("Register")} goToHome={() => setPage("Home")} />}
+      {page === "Account" && <Account userEmail={userEmail} onLogout={handleLogout} goToHome={() => setPage("Home")} />}
+      {page === "CreateNewPlan" && <CreateNewPlan userEmail = {userEmail} goToHome={() => setPage("Home")} />}
+=======
+>>>>>>> parent of cd3c60d (final commit)
       {page === "Home" && (
         <main className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
         <SearchAndFilter 
@@ -67,6 +99,7 @@ function App() {
            onFilter={handleFilter}
            searchTerm={searchTerm}
             filterCategory={filterCategory}
+            goToCreateNewPlan={() => setPage("CreateNewPlan")}
           />
         <TripPlansGrid 
             tripPlans={filteredPlans}

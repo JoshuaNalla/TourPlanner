@@ -1,7 +1,7 @@
 import React from 'react'
-import { Search, Filter } from 'lucide-react'
+import { Search, Filter, Plus } from 'lucide-react'
 
-const SearchAndFilter = ({ onSearch, onFilter, searchTerm, filterCategory }) => {
+const SearchAndFilter = ({ onSearch, onFilter, searchTerm, filterCategory, goToCreateNewPlan }) => {
   const categories = [
     { value: 'all', label: 'All Trips' },
     { value: 'adventure', label: 'Adventure' },
@@ -18,14 +18,52 @@ const SearchAndFilter = ({ onSearch, onFilter, searchTerm, filterCategory }) => 
         flexDirection: 'column',
         gap: '20px'
       }}>
-        <h2 style={{
-          fontSize: '24px',
-          fontWeight: '600',
-          color: '#333',
-          margin: 0
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '16px'
         }}>
-          Your Travel Plans
-        </h2>
+          <h2 style={{
+            fontSize: '24px',
+            fontWeight: '600',
+            color: '#333',
+            margin: 0
+          }}>
+            Your Travel Plans
+          </h2>
+          <button
+            onClick={goToCreateNewPlan}
+            className="btn btn-primary"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              borderRadius: '12px',
+              border: 'none',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              fontWeight: '600',
+              boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)'
+              e.currentTarget.style.boxShadow = '0 6px 16px rgba(102, 126, 234, 0.4)'
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)'
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)'
+            }}
+          >
+            <Plus size={20} />
+            Create New Plan
+          </button>
+        </div>
         
         <div style={{
           display: 'flex',
